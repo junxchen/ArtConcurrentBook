@@ -1,6 +1,8 @@
 package chapter09;
 
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -14,6 +16,8 @@ public class ThreadPoolExecutorDemo {
     public static void main(String[] args) {
         ArrayBlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(5);
         ThreadPoolExecutor pool = new ThreadPoolExecutor(5, 10, 200, TimeUnit.MILLISECONDS, queue);
+
+        pool.prestartAllCoreThreads();
         System.out.println(pool.getActiveCount());
         for(int i=0; i<15; i++){
             MyTask myTask = new MyTask(i);
@@ -22,6 +26,15 @@ public class ThreadPoolExecutorDemo {
 
         }
         pool.shutdown();
+
+        ExecutorService executor = Executors.newCachedThreadPool();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
+        executor.shutdown();
     }
 
 
